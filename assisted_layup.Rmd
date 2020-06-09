@@ -1,0 +1,53 @@
+---
+title: "assisted_layup"
+author: "Georgiana"
+date: "6/9/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Libaries and Packages:
+
+```{r}
+library(tidyverse)
+library(patchwork)
+library(stringr)
+library(dplyr)
+library(ggplot2)
+library(ggpubr)
+theme_set(theme_pubr())
+```
+
+## Starting Code
+```{r}
+wnba <- read.csv('http://www.stat.cmu.edu/cmsac/sure/materials/data/eda_projects/wnba_championship_game_five.csv')
+wnba
+```
+```{r}
+layup_shot_type <- wnba %>% filter(str_detect(shot_type, "layup"))
+head(layup_shot_type)
+
+```
+```{r}
+ggplot(wnba, aes(x = shot_type, y = shot_made))+
+  geom_bar(
+    aes(fill = field_goal_type), stat = "identity", color = "white",
+    position = position_dodge(0.9)
+    )+
+  facet_wrap(~team) + 
+  fill_palette("jco")
+```
+
+```{r}
+ p <- ggboxplot(wnba, x = "shot_made", y = "assisted", palette =c("#00AFBB", "#E7B800", "#FC4E07"),
+                add = "jitter")
+p
+```
+
+```{r}
+
+```
+
