@@ -1,0 +1,69 @@
+---
+title: "test"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+library(tidyverse)
+wnba <- read.csv('http://www.stat.cmu.edu/cmsac/sure/materials/data/eda_projects/wnba_championship_game_five.csv')
+wnba
+```
+```{r}
+wnba %>%
+  ggplot(aes(x = was_score)) +
+  geom_histogram() +
+  theme_bw()
+```
+```{r}
+wnba %>%
+  ggplot(aes(x = was_score)) + 
+  geom_density() +
+  geom_rug(alpha = 0.3) +
+  theme_bw()
+```
+```{r}
+library(patchwork)
+example_var_was <- wnba %>%
+  ggplot(aes(x = was_score)) + 
+  geom_density() +
+  geom_rug(alpha = 0.3) +
+  theme_bw() +
+  labs(x = "Shot distance (in feet)",
+       y = "Number of shot attempts")
+example_var_con <- wnba %>%
+  ggplot(aes(x = con_score)) + 
+  stat_ecdf() +
+  geom_rug(alpha = 0.3) +
+  theme_bw() +
+  labs(x = "Shot distance (in feet)",
+       y = "Proportion of Giannis shot attempts")
+example_var_was + example_var_con
+```
+```{r}
+##wnba %>% select(description, contains("layup shot")) %>% head
+library(stringr)
+library(dplyr)
+
+all_layups <- wnba %>%
+  filter(str_detect(description, "Layup"))
+head(all_layups)
+```
+
+```{r}
+all_layups
+```
+
+```{r}
+shot_type <- wnba %>% filter(str_detect(shot_type, "layup"))
+head(shot_type)
+```
+
+```{r}
+ggplot(data = wnba, aes(x = shot_type)) + geom_bar()
+```
+
